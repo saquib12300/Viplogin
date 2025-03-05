@@ -1,74 +1,91 @@
+// Firebase Configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyD89CQpILmaxVdH-X7L-Ex4rW-XIBA3vHU",
-    authDomain: "webai-b6629.firebaseapp.com",
-    databaseURL: "https://webai-b6629-default-rtdb.asia-southeast1.firebasedatabase.app/",
-    projectId: "webai-b6629",
-    storageBucket: "webai-b6629.firebasestorage.app",
-    messagingSenderId: "358930931757",
-    appId: "1:358930931757:web:ed7b1ab7274bbdb3b7d8a4"
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    databaseURL: "YOUR_DATABASE_URL",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
 };
+
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-function toggleMenu() {
-    document.getElementById('sidebar').classList.toggle('-translate-x-full');
-}
+// Toggle custom hours input
+document.getElementById('expirySelect').addEventListener('change', function() {
+    document.getElementById('customHours').style.display = this.value === "1h" ? "block" : "none";
+});
 
-function showSection(section) {
-    document.getElementById('generateKey').classList.add('hidden');
-    document.getElementById('manageKeys').classList.add('hidden');
-    document.getElementById(section).classList.remove('hidden');
-}
-
-function toggleDropdown() {
-    document.getElementById('dropdown').classList.toggle('hidden');
-}
-
-function selectOption(option) {
-    document.getElementById('selectedOption').textContent = option;
-    document.getElementById('dropdown').classList.add('hidden');
-
-    if (option === '1 Hour') {
-        document.getElementById('hourInput').classList.remove('hidden');
-    } else {
-        document.getElementById('hourInput').classList.add('hidden');
-    }
-}
-
+// Generate Key
 function generateKey() {
-    let chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-    let key = "";
-    for (let i = 0; i < 7; i++) {
-        key += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    document.getElementById("generatedKey").value = key;
-    
-    let duration = document.getElementById("selectedOption").textContent;
-    let expiration = new Date();
-    if (duration.includes("Hour")) {
-        let hours = parseInt(document.getElementById("hourInput").value);
-        expiration.setHours(expiration.getHours() + hours);
+    let key = document.getElementById('keyInput').value;
+    let expiry = document.getElementById('expirySelect').value;
+    let customHours = document.getElementById('customHours').value;
+
+    if (!key) return alert("Enter a key!");
+
+    let expirationTime = Date.now();
+    if (expiry === "1h" && customHours) {
+        expirationTime += customHours * 60 * 60 * 1000; 
     } else {
-        let days = parseInt(duration);
-        expiration.setDate(expiration.getDate() + days);
+        const timeMap = { "1d": 24, "3d": 72, "7d": 168, "30d": 720 };
+        expirationTime += timeMap[expiry] * 60 * 60 * 1000;
     }
 
-    let deviceID = generateDeviceID();
-    db.ref("keys").push({
-        key: key,
-        deviceID: deviceID,
-        status: "Active",
-        expiresAt: expiration.toISOString()
+    let devID = Math.random().toString(36).substring(2, 8);
+    let keyData = { key, devID, status: "Not Used", expiresAt: expirationTime };
+
+    db.ref('keys/' + key).set(keyData).then(() => {
+        alert("Key Generated Successfully!");
+        document.getElementById('keyInput').value = "";
     });
-
-    alert("Key Saved!");
 }
 
-function generateDeviceID() {
-    let chars = "abcdefghijklmnopqrstuvwxyz1234567890";
-    let id = "";
-    for (let i = 0; i < 6; i++) {
-        id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
+// Load Keys
+function loadKeys() {
+    db.ref('keys').on('value', snapshot => {
+        let keyList = document.getElementById('keyList');
+        keyList.innerHTML = "";
+        snapshot.forEach(child => {
+            let data = child.val();
+            let statusColor = data.status === "Active" ? "text-green-400" 
+                              : data.status === "Expired" ? "text-red-400" 
+                              : "text-yellow-400";
+
+            keyList.innerHTML += `
+                <div class="bg-purple-800 p-4 m-2 rounded-lg shadow-lg text-white w-1/2 flex justify-between">
+                    <span>ID: ${child.key}</span>
+                    <span>Key: ${data.key}</span>
+                    <span>Dev ID: ${data.devID}</span>
+                    <span class="${statusColor}">${data.status}</span>
+                    <button onclick="copyKey('${data.key}')" class="bg-blue-500 px-2 py-1 rounded-lg">Copy</button>
+                    <button onclick="deleteKey('${child.key}')" class="bg-red-500 px-2 py-1 rounded-lg">Delete</button>
+                </div>`;
+        });
+    });
 }
+
+// Delete Key
+function deleteKey(key) {
+    db.ref('keys/' + key).remove().then(() => {
+        alert("Key Deleted!");
+    });
+}
+
+// Copy Key
+function copyKey(key) {
+    navigator.clipboard.writeText(key);
+    alert("Key Copied!");
+}
+
+// Search Key
+function searchKey() {
+    let searchVal = document.getElementById('searchInput').value.toLowerCase();
+    document.querySelectorAll("#keyList div").forEach(div => {
+        div.style.display = div.innerText.toLowerCase().includes(searchVal) ? "block" : "none";
+    });
+}
+
+loadKeys();

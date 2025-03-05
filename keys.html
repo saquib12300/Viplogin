@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Manage Keys</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-900 text-white">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-purple-800 p-4 flex justify-between">
+        <a href="index.html" class="hover:text-yellow-400"><i class="fas fa-home"></i> Home</a>
+        <span class="text-lg font-bold">Manage Keys</span>
+    </nav>
+
+    <!-- Search Section -->
+    <div class="flex justify-center mt-5">
+        <input id="searchInput" type="text" placeholder="Search Key" 
+            class="w-1/2 p-3 text-black rounded-lg shadow-lg" onkeyup="searchKey()">
+    </div>
+
+    <!-- Key List -->
+    <div id="keyList" class="mt-10 flex flex-col items-center"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,4 @@
+.hidden { display: none; }
+#sidebar { transition: 0.3s ease-in-out; }
+#dropdown li { padding: 10px; cursor: pointer; }
+#dropdown li:hover { background: #444; }

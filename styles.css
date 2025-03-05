@@ -1,4 +1,92 @@
-.hidden { display: none; }
-#sidebar { transition: 0.3s ease-in-out; }
-#dropdown li { padding: 10px; cursor: pointer; }
-#dropdown li:hover { background: #444; }
+/* General Styles */
+body {
+    font-family: 'El Messiri', sans-serif;
+    background: #0d0c1d;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navigation Bar */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(45deg, #3a0ca3, #7209b7);
+    padding: 15px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #f4a261;
+}
+
+/* Key Input & Dropdown */
+input, select {
+    background: #1d1b31;
+    color: white;
+    border: 2px solid #3a0ca3;
+    padding: 10px;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+}
+
+input:focus, select:focus {
+    border-color: #f72585;
+    box-shadow: 0 0 10px #f72585;
+}
+
+/* Generate Button */
+button {
+    background: linear-gradient(45deg, #00b4d8, #48cae4);
+    border: none;
+    padding: 12px 20px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px #48cae4;
+}
+
+/* Key List */
+#keyList div {
+    background: rgba(58, 12, 163, 0.9);
+    border: 1px solid #7209b7;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+#keyList div:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 10px #f72585;
+}
+
+/* Search Bar */
+#searchInput {
+    width: 50%;
+    text-align: center;
+}
+
+/* Copy, Delete, Reset Buttons */
+button.bg-blue-500 { background: #0077b6; }
+button.bg-red-500 { background: #d00000; }
+button.bg-blue-500:hover, button.bg-red-500:hover {
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+}

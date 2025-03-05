@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
+    <title>Admin Panel - Key Generation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles.css">
@@ -11,71 +11,37 @@
 <body class="bg-gray-900 text-white">
 
     <!-- Navigation Bar -->
-    <nav class="bg-gray-800 p-4 flex justify-between items-center shadow-lg">
-        <h1 class="text-xl font-bold text-green-400"><i class="fas fa-user-shield"></i> Admin Panel</h1>
-        <button class="text-white text-2xl focus:outline-none" onclick="toggleMenu()">
-            <i class="fas fa-bars"></i>
-        </button>
+    <nav class="bg-purple-800 p-4 flex justify-between">
+        <span class="text-lg font-bold">Admin Panel</span>
+        <a href="keys.html" class="hover:text-yellow-400"><i class="fas fa-key"></i> Manage Keys</a>
     </nav>
 
-    <!-- Sidebar Menu -->
-    <div id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-gray-800 transform -translate-x-full transition-transform">
-        <ul class="mt-4 p-4 space-y-3">
-            <li class="p-3 hover:bg-gray-700 cursor-pointer" onclick="showSection('generateKey')">
-                <i class="fas fa-key text-green-400"></i> Generate Key
-            </li>
-            <li class="p-3 hover:bg-gray-700 cursor-pointer" onclick="showSection('manageKeys')">
-                <i class="fas fa-list text-blue-400"></i> Manage Keys
-            </li>
-        </ul>
-    </div>
-
-    <!-- Main Content -->
-    <div class="p-6">
-
-        <!-- Generate Key Section -->
-        <div id="generateKey">
-            <h2 class="text-2xl"><i class="fas fa-plus-circle text-green-400"></i> Generate Key</h2>
-            <div class="flex items-center mt-3">
-                <input type="text" id="generatedKey" class="p-2 bg-gray-700 text-white rounded w-full" placeholder="Generated Key" readonly>
-                <button onclick="copyKey()" class="ml-2 text-blue-400"><i class="fas fa-copy"></i></button>
-            </div>
-            
-            <!-- Key Type Selector -->
-            <div class="relative mt-3">
-                <button onclick="toggleDropdown()" class="w-full bg-green-500 p-2 rounded flex justify-between items-center">
-                    <span id="selectedOption">Select Key Duration</span>
-                    <i class="fas fa-calendar-alt"></i>
-                </button>
-                <ul id="dropdown" class="absolute left-0 mt-1 w-full bg-gray-800 rounded hidden">
-                    <li onclick="selectOption('1 Hour')"><i class="fas fa-clock"></i> 1 Hour</li>
-                    <li onclick="selectOption('1 Day')"><i class="fas fa-calendar-day"></i> 1 Day</li>
-                    <li onclick="selectOption('3 Days')"><i class="fas fa-calendar-week"></i> 3 Days</li>
-                    <li onclick="selectOption('7 Days')"><i class="fas fa-calendar-alt"></i> 7 Days</li>
-                    <li onclick="selectOption('15 Days')"><i class="fas fa-calendar"></i> 15 Days</li>
-                    <li onclick="selectOption('30 Days')"><i class="fas fa-calendar-check"></i> 30 Days</li>
-                </ul>
-            </div>
-
-            <!-- Hour Input (Appears for 1 Hour Option) -->
-            <input type="number" id="hourInput" class="p-2 bg-gray-700 text-white rounded mt-3 w-full hidden" placeholder="Enter Hours">
-            
-            <button onclick="generateKey()" class="mt-4 bg-blue-500 p-2 rounded w-full">
-                <i class="fas fa-cog"></i> Generate Key
-            </button>
+    <!-- Key Generation Section -->
+    <div class="flex flex-col items-center mt-10">
+        <input id="keyInput" type="text" placeholder="Enter Key" 
+            class="w-1/2 p-3 text-black rounded-lg shadow-lg">
+        <hr class="w-1/2 border-purple-500 mt-2">
+        
+        <!-- Expiry Selection -->
+        <div class="mt-5 flex items-center">
+            <i class="fas fa-calendar text-yellow-400 text-xl cursor-pointer" onclick="toggleDropdown()"></i>
+            <select id="expirySelect" class="ml-2 p-2 bg-purple-700 rounded-lg">
+                <option value="1h">1 Hour</option>
+                <option value="1d">1 Day</option>
+                <option value="3d">3 Days</option>
+                <option value="7d">7 Days</option>
+                <option value="30d">30 Days</option>
+            </select>
         </div>
 
-        <!-- Manage Keys Section -->
-        <div id="manageKeys" class="hidden">
-            <h2 class="text-2xl"><i class="fas fa-database text-yellow-400"></i> Manage Keys</h2>
-            
-            <div class="flex items-center mt-3">
-                <input type="text" id="searchKey" class="p-2 bg-gray-700 text-white rounded w-full" placeholder="Search Key">
-                <button onclick="searchKey()" class="ml-2 text-green-400"><i class="fas fa-search"></i></button>
-            </div>
-            
-            <ul id="keyList" class="mt-4 space-y-3"></ul>
-        </div>
+        <input id="customHours" type="number" placeholder="Custom Hours" 
+            class="w-1/4 p-2 mt-2 text-black hidden rounded-lg" min="1">
+
+        <!-- Generate Button -->
+        <button onclick="generateKey()" class="mt-5 px-5 py-2 bg-green-500 text-black rounded-lg 
+                hover:bg-green-600 transition-all">
+            Generate Key
+        </button>
     </div>
 
     <script src="script.js"></script>
